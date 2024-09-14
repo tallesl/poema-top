@@ -1,5 +1,9 @@
 # caminho do arquivo com texto a ser utilizado no treino
-arquivo_txt = 'dados_treino/poemas.txt'
+dataset_txt = 'dados_treino/poemas.txt'
+
+# terminador entre os registros do dataset a ser removido
+# utilize None para desabilitar a remoção
+remove_terminador = '@\n'
 
 # quantidade de caracteres de cada janela de texto
 tamanho_janela = 60

@@ -7,6 +7,7 @@ from keras.callbacks import Callback, EarlyStopping, ModelCheckpoint
 import numpy as np
 
 from . import configuracao
+from .pre_processamento.leitura_dataset import le_txt_dataset
 from .pre_processamento.janelas_one_hot import JanelasOneHot
 from .pre_processamento.vocabulario import Vocabulario
 from .rede_neural.keras_util import alocar_memoria_aos_poucos, CallbackFimEpoca
@@ -70,8 +71,7 @@ def seleciona_caractere_predito(logits: np.ndarray[np.float32], temperatura: flo
 if __name__ == '__main__':
     alocar_memoria_aos_poucos()
 
-    with open(configuracao.arquivo_txt, encoding='utf-8') as f:
-        texto_completo = f.read().lower()
+    texto_completo = le_txt_dataset()
 
     vocabulario = Vocabulario(texto_completo)
     janelas = JanelasOneHot(texto_completo, vocabulario)
