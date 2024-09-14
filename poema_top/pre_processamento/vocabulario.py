@@ -1,11 +1,12 @@
 import numpy as np
+from numpy.typing import NDArray
 
-from ..configuracao import tamanho_janela
+from .. import configuracao
 
 class Vocabulario:
     def __init__(self, texto_completo: str):
         assert texto_completo
-        assert len(texto_completo) > tamanho_janela
+        assert len(texto_completo) > configuracao.tamanho_janela
 
         # caracteres únicos ordenados
         caracteres = sorted(set(texto_completo))
@@ -16,22 +17,22 @@ class Vocabulario:
         self.tamanho = len(caracteres)
 
 
-    def one_hot_texto(self, texto: str) -> np.ndarray[np.ndarray[bool]]:
+    def one_hot_texto(self, texto: str) -> NDArray[np.bool_]:
         assert texto
 
         # convertendo cada caractere do texto para one hot
         array = [self.one_hot_caractere(c) for c in texto]
 
         # convertendo para um array do NumPy
-        array = np.array(array)
+        np_array = np.array(array)
 
-        assert array.shape == (len(texto), self.tamanho)
-        assert array.dtype == bool
+        assert np_array.shape == (len(texto), self.tamanho)
+        assert np_array.dtype == bool
 
-        return array
+        return np_array
 
 
-    def one_hot_caractere(self, caractere: str) -> np.ndarray[bool]:
+    def one_hot_caractere(self, caractere: str) -> NDArray[np.bool_]:
         assert caractere
         assert len(caractere) == 1
 
