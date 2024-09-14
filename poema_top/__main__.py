@@ -89,7 +89,7 @@ if __name__ == '__main__':
 
 
     callback_checkpoint = ModelCheckpoint(filepath='modelos_treinados/epoch-{epoch}-loss-{loss}.keras', monitor='loss', save_best_only=True)
-    callback_amostra = CallbackFimEpoca(gerar_amostra, 5)
+    callback_amostra = CallbackFimEpoca(gerar_amostra, 10)
     callback_parada = EarlyStopping(monitor='loss', patience=100, verbose=1)
     callbacks = [callback_checkpoint, callback_amostra, callback_parada]
 

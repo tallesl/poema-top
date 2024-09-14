@@ -1,6 +1,9 @@
 # caminho do arquivo com texto a ser utilizado no treino
 dataset_txt = 'dados_treino/poemas.txt'
 
+# convertendo para lowercase faz o vocabulário ficar menor e diminui consideravelmente a memória ocupada
+converte_lowercase = True
+
 # terminador entre os registros do dataset a ser removido
 # utilize None para desabilitar a remoção
 remove_terminador = '@\n'
