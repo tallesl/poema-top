@@ -9,48 +9,44 @@ import numpy as np
 from . import configuracao
 from .pre_processamento.janelas_one_hot import JanelasOneHot
 from .pre_processamento.vocabulario import Vocabulario
-from .rede_neural import alocar_memoria_aos_poucos
+from .rede_neural.keras_util import alocar_memoria_aos_poucos, CallbackFimEpoca
 
 
-class CustomCallback(Callback):
-    def on_epoch_end(self, epoch: int, logs: Optional[str] = None) -> None:
-        #if epoch % 30 != 0:
-        #    return
+def gerar_amostra():
+    # índice do primeiro caractere da última janela (começo da última janela)
+    indice_comeco_ultima_janela = len(texto_completo) - configuracao.tamanho_janela # -1??
 
-        # índice do primeiro caractere da última janela (começo da última janela)
-        indice_comeco_ultima_janela = len(texto_completo) - configuracao.tamanho_janela # -1??
+    inicio_janela = randint(0, indice_comeco_ultima_janela)
+    fim_janela = inicio_janela + configuracao.tamanho_janela
+    janela_aleatoria = texto_completo[inicio_janela : fim_janela]
 
-        inicio_janela = randint(0, indice_comeco_ultima_janela)
-        fim_janela = inicio_janela + configuracao.tamanho_janela
-        janela_aleatoria = texto_completo[inicio_janela : fim_janela]
+    print(f'--- Gerando com o seguinte texto inicial: "{janela_aleatoria}"')
 
-        print(f'--- Gerando com o seguinte texto inicial: "{janela_aleatoria}"')
+    for temperatura in [0.2, 0.5, 1.0, 1.2]:
+        print('------ temperatura:', temperatura)
+        stdout.write(janela_aleatoria)
 
-        for temperatura in [0.2, 0.5, 1.0, 1.2]:
-            print('------ temperatura:', temperatura)
-            stdout.write(janela_aleatoria)
+        # texto a ser construído, iniciando com a janela aleatória selecionada
+        texto_gerado = janela_aleatoria
 
-            # texto a ser construído, iniciando com a janela aleatória selecionada
-            texto_gerado = janela_aleatoria
+        # gerando 400 caracteres seguintes
+        for i in range(400):
+            sampled = np.zeros((1, configuracao.tamanho_janela, vocabulario.tamanho))
+            for i, char in enumerate(texto_gerado):
+                sampled[0, i, vocabulario.obtem_indice[char]] = 1.
 
-            # gerando 400 caracteres seguintes
-            for i in range(400):
-                sampled = np.zeros((1, configuracao.tamanho_janela, vocabulario.tamanho))
-                for i, char in enumerate(texto_gerado):
-                    sampled[0, i, vocabulario.obtem_indice[char]] = 1.
+            previsto = model.predict(sampled, verbose=0)[0]
 
-                previsto = model.predict(sampled, verbose=0)[0]
+            proximo_indice = seleciona_caractere_predito(previsto, temperatura)
+            proximo_caractere = vocabulario.obtem_caractere[proximo_indice]
 
-                proximo_indice = seleciona_caractere_predito(previsto, temperatura)
-                proximo_caractere = vocabulario.obtem_caractere[proximo_indice]
+            texto_gerado += proximo_caractere
+            texto_gerado = texto_gerado[1:]
 
-                texto_gerado += proximo_caractere
-                texto_gerado = texto_gerado[1:]
+            stdout.write(proximo_caractere)
+            stdout.flush()
 
-                stdout.write(proximo_caractere)
-                stdout.flush()
-
-            print()
+        print()
 
 def seleciona_caractere_predito(logits: np.ndarray[np.float32], temperatura: float = 1.0) -> np.int64:
     # converte a lista de predições para um array float64
@@ -93,7 +89,7 @@ if __name__ == '__main__':
 
 
     callback_checkpoint = ModelCheckpoint(filepath='modelos_treinados/epoch-{epoch}-loss-{loss}.keras', monitor='loss', save_best_only=True)
-    callback_amostra = CustomCallback()
+    callback_amostra = CallbackFimEpoca(gerar_amostra, 5)
     callback_parada = EarlyStopping(monitor='loss', patience=100, verbose=1)
     callbacks = [callback_checkpoint, callback_amostra, callback_parada]
 
