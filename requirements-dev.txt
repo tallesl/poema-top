@@ -2,4 +2,5 @@ mypy
 objexplore
 pudb
 pylint
+pytest
 types-tensorflow
