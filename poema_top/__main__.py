@@ -5,16 +5,11 @@ from typing import Optional
 from keras import layers, optimizers, models
 from keras.callbacks import Callback, EarlyStopping, ModelCheckpoint
 import numpy as np
-import tensorflow as tf
 
 from . import configuracao
 from .pre_processamento.janelas_one_hot import JanelasOneHot
 from .pre_processamento.vocabulario import Vocabulario
-
-gpus = tf.config.experimental.list_physical_devices('GPU')
-
-for gpu in gpus:
-  tf.config.experimental.set_memory_growth(gpu, True)
+from .rede_neural import alocar_memoria_aos_poucos
 
 
 class CustomCallback(Callback):
@@ -77,6 +72,8 @@ def seleciona_caractere_predito(logits: np.ndarray[np.float32], temperatura: flo
     return np.argmax(probabilidades)
 
 if __name__ == '__main__':
+    alocar_memoria_aos_poucos()
+
     with open(configuracao.arquivo_txt, encoding='utf-8') as f:
         texto_completo = f.read().lower()
 
