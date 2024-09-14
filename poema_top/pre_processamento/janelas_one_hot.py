@@ -10,7 +10,6 @@ class JanelasOneHot:
 
         janelas_menos_ultimo, janelas_ultimo = _janelas(texto_completo)
         self.x, self.y = _one_hot(janelas_menos_ultimo, janelas_ultimo, vocabulario)
-        import pudb;pu.db
 
 def _janelas(texto_completo: str) -> tuple[list[str], list[str]]:
     assert texto_completo

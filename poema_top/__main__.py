@@ -8,8 +8,8 @@ import numpy as np
 import tensorflow as tf
 
 from . import configuracao
-from ._interno.janelas_one_hot import JanelasOneHot
-from ._interno.vocabulario import Vocabulario
+from .pre_processamento.janelas_one_hot import JanelasOneHot
+from .pre_processamento.vocabulario import Vocabulario
 
 gpus = tf.config.experimental.list_physical_devices('GPU')
 
