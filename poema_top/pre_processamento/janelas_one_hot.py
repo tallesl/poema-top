@@ -7,6 +7,7 @@ class JanelasOneHot:
     def __init__(self, texto_completo: str, vocabulario: Vocabulario) -> None:
         assert texto_completo
         assert vocabulario
+        assert len(texto_completo) > configuracao.tamanho_janela
 
         janelas_exceto_ultimo, janelas_ultimo = _quebra_em_janelas(texto_completo)
         self.x, self.y = _one_hot_janelas(janelas_exceto_ultimo, janelas_ultimo, vocabulario)

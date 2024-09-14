@@ -1,12 +1,9 @@
 import numpy as np
 from numpy.typing import NDArray
 
-from .. import configuracao
-
 class Vocabulario:
     def __init__(self, texto_completo: str):
         assert texto_completo
-        assert len(texto_completo) > configuracao.tamanho_janela
 
         # caracteres únicos ordenados
         caracteres = sorted(set(texto_completo))
