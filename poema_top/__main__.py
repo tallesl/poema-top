@@ -72,17 +72,14 @@ def seleciona_caractere_predito(logits: np.ndarray[np.float32], temperatura: flo
 if __name__ == '__main__':
     alocar_memoria_aos_poucos()
 
-    print('Lendo txt...')
-    with LogaMemoria():
+    with LogaMemoria('Lendo txt...'):
         texto_completo = le_txt_dataset()
 
-    print('Quebrando em janelas e codificando em one hot...')
-    with LogaMemoria():
+    with LogaMemoria('Quebrando em janelas e codificando em one hot...'):
         vocabulario = Vocabulario(texto_completo)
         janelas = JanelasOneHot(texto_completo, vocabulario)
 
-    print('Instanciando modelo...')
-    with LogaMemoria():
+    with LogaMemoria('Instanciando modelo...'):
         layers = [
             layers.Input(shape=(configuracao.tamanho_janela, vocabulario.tamanho)),
             layers.LSTM(128),
@@ -98,10 +95,9 @@ if __name__ == '__main__':
         callback_checkpoint = ModelCheckpoint(filepath='modelos_treinados/epoch-{epoch}-loss-{loss}.keras', monitor='loss', save_best_only=True)
         callback_amostra = CallbackFimEpoca(gerar_amostra, 10)
         callback_parada = EarlyStopping(monitor='loss', patience=100, verbose=1)
-        callbacks = [callback_checkpoint, callback_parada]
+        callback_diminui_learning_rate = ReduceLROnPlateau(monitor='loss', factor=0.9, patience=5, verbose=1,)
 
+        callbacks = [callback_checkpoint, callback_parada, callback_diminui_learning_rate]
 
-
-    print('Treinando...')
-    with LogaMemoria():
-        model.fit(janelas.x, janelas.y, batch_size=128, epochs=10, callbacks=callbacks)
+    with LogaMemoria('Treinando...'):
+            model.fit(janelas.x, janelas.y, batch_size=128, epochs=30, callbacks=callbacks)

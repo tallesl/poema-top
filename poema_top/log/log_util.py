@@ -3,10 +3,12 @@ from ..rede_neural.keras_util import obtem_vram
 
 
 class LogaMemoria:
-    def __init__(self):
+    def __init__(self, print_inicial: str):
         self.tempo_inicio = time()
 
     def __enter__(self):
+        print(self.print_inicial)
+
         self.ram_inicial = _obtem_ram()
         self.vram_inicial, self.vram_pico_inicial = obtem_vram()
 
