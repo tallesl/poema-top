@@ -7,8 +7,9 @@ from keras.callbacks import Callback, EarlyStopping, ModelCheckpoint
 import numpy as np
 
 from . import configuracao
-from .pre_processamento.leitura_dataset import le_txt_dataset
+from .log.log_util import LogaMemoria
 from .pre_processamento.janelas_one_hot import JanelasOneHot
+from .pre_processamento.leitura_dataset import le_txt_dataset
 from .pre_processamento.vocabulario import Vocabulario
 from .rede_neural.keras_util import alocar_memoria_aos_poucos, CallbackFimEpoca
 
@@ -71,26 +72,36 @@ def seleciona_caractere_predito(logits: np.ndarray[np.float32], temperatura: flo
 if __name__ == '__main__':
     alocar_memoria_aos_poucos()
 
-    texto_completo = le_txt_dataset()
+    print('Lendo txt...')
+    with LogaMemoria():
+        texto_completo = le_txt_dataset()
 
-    vocabulario = Vocabulario(texto_completo)
-    janelas = JanelasOneHot(texto_completo, vocabulario)
+    print('Quebrando em janelas e codificando em one hot...')
+    with LogaMemoria():
+        vocabulario = Vocabulario(texto_completo)
+        janelas = JanelasOneHot(texto_completo, vocabulario)
 
-    layers = [
-        layers.Input(shape=(configuracao.tamanho_janela, vocabulario.tamanho)),
-        layers.LSTM(128),
-        layers.Dense(vocabulario.tamanho, activation='softmax')
-    ]
+    print('Instanciando modelo...')
+    with LogaMemoria():
+        layers = [
+            layers.Input(shape=(configuracao.tamanho_janela, vocabulario.tamanho)),
+            layers.LSTM(128),
+            layers.Dense(vocabulario.tamanho, activation='softmax')
+        ]
 
-    model = models.Sequential(layers)
+        model = models.Sequential(layers)
 
-    optimizer = optimizers.RMSprop(learning_rate=0.01)
-    model.compile(loss='categorical_crossentropy', optimizer=optimizer)
+        optimizer = optimizers.RMSprop(learning_rate=0.01)
+        model.compile(loss='categorical_crossentropy', optimizer=optimizer)
 
 
-    callback_checkpoint = ModelCheckpoint(filepath='modelos_treinados/epoch-{epoch}-loss-{loss}.keras', monitor='loss', save_best_only=True)
-    callback_amostra = CallbackFimEpoca(gerar_amostra, 10)
-    callback_parada = EarlyStopping(monitor='loss', patience=100, verbose=1)
-    callbacks = [callback_checkpoint, callback_amostra, callback_parada]
+        callback_checkpoint = ModelCheckpoint(filepath='modelos_treinados/epoch-{epoch}-loss-{loss}.keras', monitor='loss', save_best_only=True)
+        callback_amostra = CallbackFimEpoca(gerar_amostra, 10)
+        callback_parada = EarlyStopping(monitor='loss', patience=100, verbose=1)
+        callbacks = [callback_checkpoint, callback_parada]
 
-    model.fit(janelas.x, janelas.y, batch_size=128, epochs=999999, callbacks=callbacks)
+
+
+    print('Treinando...')
+    with LogaMemoria():
+        model.fit(janelas.x, janelas.y, batch_size=128, epochs=10, callbacks=callbacks)
