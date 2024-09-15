@@ -4,6 +4,7 @@ from ..rede_neural.keras_util import obtem_vram
 
 class LogaMemoria:
     def __init__(self, print_inicial: str):
+        self.print_inicial = print_inicial
         self.tempo_inicio = time()
 
     def __enter__(self):

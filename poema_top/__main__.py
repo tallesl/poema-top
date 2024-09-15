@@ -95,9 +95,8 @@ if __name__ == '__main__':
         callback_checkpoint = ModelCheckpoint(filepath='modelos_treinados/epoch-{epoch}-loss-{loss}.keras', monitor='loss', save_best_only=True)
         callback_amostra = CallbackFimEpoca(gerar_amostra, 10)
         callback_parada = EarlyStopping(monitor='loss', patience=100, verbose=1)
-        callback_diminui_learning_rate = ReduceLROnPlateau(monitor='loss', factor=0.9, patience=5, verbose=1,)
 
-        callbacks = [callback_checkpoint, callback_parada, callback_diminui_learning_rate]
+        callbacks = [callback_checkpoint, callback_parada]
 
     with LogaMemoria('Treinando...'):
-            model.fit(janelas.x, janelas.y, batch_size=128, epochs=30, callbacks=callbacks)
+        model.fit(janelas.x, janelas.y, batch_size=128, epochs=999999, callbacks=callbacks)
