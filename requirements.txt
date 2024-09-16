@@ -1,1 +1,2 @@
-tensorflow[and-cuda]
+psutil==6.0.0
+tensorflow[and-cuda]==2.17.0
