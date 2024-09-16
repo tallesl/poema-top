@@ -88,15 +88,15 @@ if __name__ == '__main__':
 
         model = models.Sequential(layers)
 
-        optimizer = optimizers.RMSprop(learning_rate=0.01)
+        optimizer = optimizers.RMSprop(learning_rate=0.001)
         model.compile(loss='categorical_crossentropy', optimizer=optimizer)
 
 
-        callback_checkpoint = ModelCheckpoint(filepath='../modelos_treinados/epoch-{epoch}-loss-{loss}.keras', monitor='loss', save_best_only=True)
-        callback_amostra = CallbackFimEpoca(gerar_amostra, 10)
-        callback_parada = EarlyStopping(monitor='loss', patience=100, verbose=1)
+        callback_checkpoint = ModelCheckpoint(filepath=configuracao.caminho_checkpoint, monitor='loss', save_best_only=True)
+        callback_amostra = CallbackFimEpoca(gerar_amostra, configuracao.epocas_amostra)
+        callback_parada = EarlyStopping(monitor='loss', patience=configuracao.paciencia_treino, verbose=1)
 
         callbacks = [callback_checkpoint, callback_parada]
 
     with LogaMemoria('Treinando...'):
-        model.fit(janelas.x, janelas.y, batch_size=128, epochs=999999, callbacks=callbacks)
+        model.fit(janelas.x, janelas.y, batch_size=128, epochs=configuracao.epocas_treino, callbacks=callbacks)

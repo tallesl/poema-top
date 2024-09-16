@@ -13,3 +13,18 @@ tamanho_janela = 60
 
 # ao 'fatiar' o texto em janelas, quantos caracteres são 'pulados' para o ínicio de uma nova janela
 distancia_janela = 3
+
+# learning rate do treino
+learning_rate = 0.001
+
+# gerar amostra após quantas épocas
+epocas_amostra = 10
+
+# paciência do treino (quantas épocas seguidas com resultado pior que o treino irá suportar antes de encerrar)
+paciencia_treino = 50
+
+# quantidade de épocas do treino
+epocas_treino = 9999
+
+# caminho dos checkpoints salvos durante treino
+caminho_checkpoint = '../modelos_treinados/epoch-{epoch}-loss-{loss}.keras'
