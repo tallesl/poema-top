@@ -1,5 +1,5 @@
 # caminho do arquivo com texto a ser utilizado no treino
-dataset_txt = '../dataset_treino/poemas.txt'
+dataset_txt = '../dataset_treino/poemas-10k.txt'
 
 # convertendo para lowercase faz o vocabulário ficar menor e diminui consideravelmente a memória ocupada
 converte_lowercase = True
