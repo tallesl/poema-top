@@ -14,8 +14,8 @@ tamanho_janela = 60
 # ao 'fatiar' o texto em janelas, quantos caracteres são 'pulados' para o ínicio de uma nova janela
 distancia_janela = 3
 
-# learning rate do treino
-learning_rate = 0.001
+# velocidade de aprendizagem do treino (learning rate)
+taxa_aprendizagem = 0.001
 
 # gerar amostra após quantas épocas
 epocas_amostra = 10
