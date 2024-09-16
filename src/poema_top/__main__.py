@@ -92,7 +92,7 @@ if __name__ == '__main__':
         model.compile(loss='categorical_crossentropy', optimizer=optimizer)
 
 
-        callback_checkpoint = ModelCheckpoint(filepath='modelos_treinados/epoch-{epoch}-loss-{loss}.keras', monitor='loss', save_best_only=True)
+        callback_checkpoint = ModelCheckpoint(filepath='../modelos_treinados/epoch-{epoch}-loss-{loss}.keras', monitor='loss', save_best_only=True)
         callback_amostra = CallbackFimEpoca(gerar_amostra, 10)
         callback_parada = EarlyStopping(monitor='loss', patience=100, verbose=1)
 
