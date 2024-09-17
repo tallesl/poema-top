@@ -15,5 +15,8 @@ mypy:
 pytest:
     pytest --setup-show
 
-run:
-    python3 -m poema_top
+inferencia:
+    python3 -m poema_top.inferencia
+
+treino:
+    python3 -m poema_top.treino
