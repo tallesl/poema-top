@@ -18,8 +18,8 @@ mypy:
 pytest:
     pytest --setup-show
 
-inferencia:
-    python3 -m poema_top.inferencia
-
-treino:
+treina:
     python3 -m poema_top.treina_modelo
+
+gera:
+    python3 -m poema_top.gera_poema
