@@ -6,6 +6,9 @@ venv:
     venv/bin/pip install -r requirements.txt
     venv/bin/pip install -r requirements-dev.txt
 
+vim:
+    vim poema_top/
+
 pylint:
     pylint poema_top/ --max-line-length 120 || :
 
@@ -19,4 +22,4 @@ inferencia:
     python3 -m poema_top.inferencia
 
 treino:
-    python3 -m poema_top.treino
+    python3 -m poema_top.treina_modelo
