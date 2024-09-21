@@ -1,5 +1,6 @@
 from time import time
-from ..rede_neural.keras_util import obtem_vram
+
+from ..comum.keras import obtem_vram
 
 
 class LogaMemoria:

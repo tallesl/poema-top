@@ -1,6 +1,6 @@
 from random import randint
 
-from .. import configuracao
+from . import configuracao
 
 def le_txt_dataset() -> str:
     with open(configuracao.dataset_txt, encoding='utf-8') as arquivo:

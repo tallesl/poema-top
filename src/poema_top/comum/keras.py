@@ -16,19 +16,6 @@ def alocar_memoria_aos_poucos():
       tf.config.experimental.set_memory_growth(gpu, True)
 
 
-class CallbackFimEpoca(Callback):
-    def __init__(self, callback: Callable[[], None], pular_epocas: Optional[int] = None):
-        self.callback = callback
-        self.pular_epocas = pular_epocas
-
-
-    def on_epoch_end(self, epoch: int, logs: Optional[str] = None) -> None:
-        if self.pular_epocas and (epoch % self.pular_epocas != 0):
-            return
-
-        self.callback()
-
-
 def obtem_vram() -> tuple[int, int]:
     import tensorflow as tf
 

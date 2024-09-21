@@ -1,13 +1,15 @@
 import numpy as np
 
-from .. import configuracao
-from .vocabulario import Vocabulario
+from . import configuracao
+from ..comum import configuracao as configuracao_comum
+from ..comum.vocabulario import Vocabulario
+
 
 class JanelasOneHot:
     def __init__(self, texto_completo: str, vocabulario: Vocabulario) -> None:
         assert texto_completo
         assert vocabulario
-        assert len(texto_completo) > configuracao.tamanho_janela
+        assert len(texto_completo) > configuracao_comum.tamanho_janela
 
         janelas_exceto_ultimo, janelas_ultimo = _quebra_em_janelas(texto_completo)
         self.x, self.y = _one_hot_janelas(janelas_exceto_ultimo, janelas_ultimo, vocabulario)
@@ -25,7 +27,7 @@ def _quebra_em_janelas(texto_completo: str) -> tuple[list[str], list[str]]:
     for i in range(0, total_caracteres, configuracao.distancia_janela):
 
         inicio_janela = i
-        fim_janela = i + configuracao.tamanho_janela - 1
+        fim_janela = i + configuracao_comum.tamanho_janela - 1
 
         # a última janela é descartada para garantir que as janelas tenham o mesmo tamanho
         if fim_janela >= total_caracteres:
@@ -35,7 +37,7 @@ def _quebra_em_janelas(texto_completo: str) -> tuple[list[str], list[str]]:
         ultimo = texto_completo[fim_janela] # último caractere
 
         # exceto último + último = janela completa 
-        assert len(exceto_ultimo) + len(ultimo) == configuracao.tamanho_janela
+        assert len(exceto_ultimo) + len(ultimo) == configuracao_comum.tamanho_janela
 
         janelas_exceto_ultimo.append(exceto_ultimo)
         janelas_ultimo.append(ultimo)
@@ -61,7 +63,7 @@ def _one_hot_janelas(janelas_exceto_ultimo: list[str], janelas_ultimo: list[str]
     # "y" são os últimos caracteres (de cada janela) codificados em one hot
     # shape: (total janelas, tamanho do vocabulário)
 
-    shape_x = (total_janelas, configuracao.tamanho_janela - 1, vocabulario.tamanho)
+    shape_x = (total_janelas, configuracao_comum.tamanho_janela - 1, vocabulario.tamanho)
     shape_y = (total_janelas, vocabulario.tamanho)
 
     x = np.zeros(shape_x, dtype=bool)

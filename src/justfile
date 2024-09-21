@@ -13,13 +13,13 @@ pylint:
     pylint poema_top/ --max-line-length 120 || :
 
 mypy:
-    mypy poema_top/__main__.py --strict || :
+    mypy -p poema_top --strict || :
 
 pytest:
     pytest --setup-show
 
 treina:
-    python3 -m poema_top.treina_modelo
+    python3 -m poema_top.treina
 
 amostra:
     python3 -m poema_top.amostra
