@@ -18,7 +18,10 @@ distancia_janela = 3
 taxa_aprendizagem = 0.001
 
 # gerar amostra após quantas épocas
-epocas_amostra = 10
+epocas_amostras = 10
+
+# temperatura e quantidade de amostras a ser gerada
+temperatura_amostras = [0.2, 0.6, 1.0]
 
 # paciência do treino (quantas épocas seguidas com resultado pior que o treino irá suportar antes de encerrar)
 paciencia_treino = 50
