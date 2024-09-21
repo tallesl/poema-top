@@ -28,3 +28,9 @@ epocas_treino = 9999
 
 # caminho dos checkpoints salvos durante treino
 caminho_checkpoint = '../modelos_treinados/epoch-{epoch}-loss-{loss}.keras'
+
+# unidades (neurônios) da camada LSTM
+unidades_lstm = 128
+
+# se deve-se utilizar apenas uma camada ou duas camadas LSTM, uma seguida outra
+duas_camadas_lstm = False

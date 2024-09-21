@@ -1,10 +1,13 @@
 from random import randint
 from sys import stdout
 
-from keras import Model, layers, optimizers, models
 from keras.callbacks import Callback, EarlyStopping, ModelCheckpoint
+from keras.layers import Dense, Input, LSTM
+from keras.models import Model, Sequential
+from keras.optimizers import RMSprop
 import numpy as np
 
+from .. import configuracao
 from ..pre_processamento.vocabulario import Vocabulario
 from .keras_util import CallbackFimEpoca
 from .predicao import seleciona_caractere
@@ -12,15 +15,27 @@ from .predicao import seleciona_caractere
 from .. import configuracao
 
 def modelo_fchollet(vocabulario: Vocabulario) -> Model:
-    camadas = [
-        layers.Input(shape=(configuracao.tamanho_janela, vocabulario.tamanho)),
-        layers.LSTM(128),
-        layers.Dense(vocabulario.tamanho, activation='softmax')
-    ]
+    # "a plain stack of layers where each layer has exactly one input tensor and one output tensor"
+    modelo = Sequential(camadas)
 
-    modelo = models.Sequential(camadas)
+    # camada de entrada
+    formato_entrada = (configuracao.tamanho_janela, vocabulario.tamanho)
+    modelo.layers.append(Input(shape=formato_entrada))
 
-    otimizador = optimizers.RMSprop(learning_rate=configuracao.taxa_aprendizagem)
+    # camada LSTM opcional
+    if configuracao.duas_camadas_lstm:
+        modelo.layers.append(LSTM(128, return_sequences=True))
+
+    # camada LSTM sempre present
+    modelo.layers.append(LSTM(128))
+
+    # camada de saída
+    modelo.layers.append(Dense(vocabulario.tamanho, activation='softmax'))
+
+    # atualiza os pesos a cada batch utilizando a média móvel dos quadrados dos gradientes das últimas N iterações,
+    # ajustando as taxas de aprendizado (taxa individual para cada peso), prevenindo a explosão e dissipação dos
+    # gradientes
+    otimizador = RMSprop(learning_rate=configuracao.taxa_aprendizagem)
     modelo.compile(loss='categorical_crossentropy', optimizer=otimizador)
 
     return modelo
@@ -41,7 +56,7 @@ def _gera_amostra(modelo: Model, vocabulario: Vocabulario, texto_completo: str) 
 
     janela_aleatoria = texto_completo[inicio_janela : fim_janela]
 
-    for temperatura in [0.7, 1.0, 1.3]:
+    for temperatura in [0.2, 0.6, 1.0]:
         print()
         print(f'Amostra com temperatura {temperatura}:')
         print(f'[{janela_aleatoria}]', end='', flush=True)
