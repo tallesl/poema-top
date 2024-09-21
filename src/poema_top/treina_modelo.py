@@ -4,7 +4,7 @@ from .pre_processamento.janelas_one_hot import JanelasOneHot
 from .pre_processamento.leitura_dataset import le_txt_dataset
 from .pre_processamento.vocabulario import Vocabulario
 from .rede_neural.keras_util import alocar_memoria_aos_poucos
-from .rede_neural.redes import callbacks_treino, modelo_fchollet
+from .rede_neural.redes import callbacks_treino, cria_modelo
 
 if __name__ == '__main__':
     alocar_memoria_aos_poucos()
@@ -12,12 +12,14 @@ if __name__ == '__main__':
     with LogaMemoria('Lendo txt...'):
         texto_completo = le_txt_dataset()
 
-    with LogaMemoria('Quebrando em janelas e codificando em one hot...'):
+    with LogaMemoria('Montando vocabulário...'):
         vocabulario = Vocabulario(texto_completo)
+
+    with LogaMemoria('Quebrando em janelas e codificando em one hot...'):
         janelas = JanelasOneHot(texto_completo, vocabulario)
 
     with LogaMemoria('Instanciando modelo...'):
-        modelo = modelo_fchollet(vocabulario)
+        modelo = cria_modelo(vocabulario)
         callbacks = callbacks_treino(modelo, vocabulario, texto_completo)
 
     with LogaMemoria('Treinando...'):

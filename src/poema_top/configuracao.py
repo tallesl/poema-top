@@ -21,7 +21,10 @@ taxa_aprendizagem = 0.001
 epocas_amostras = 10
 
 # temperatura e quantidade de amostras a ser gerada
-temperatura_amostras = [0.2, 0.6, 1.0]
+temperatura_amostras = [0.3, 0.6, 0.9]
+
+# quantidade de caracteres a ser gerado em cada amostra
+tamanho_amostras = 200
 
 # paciência do treino (quantas épocas seguidas com resultado pior que o treino irá suportar antes de encerrar)
 paciencia_treino = 50
