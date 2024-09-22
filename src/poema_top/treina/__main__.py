@@ -1,3 +1,6 @@
+from datetime import datetime
+from os.path import join
+
 from keras.callbacks import Callback, EarlyStopping, ModelCheckpoint
 from keras.layers import Dense, Input, LSTM
 from keras.models import Model, Sequential
@@ -9,6 +12,7 @@ from ..comum.dataset import le_txt_dataset
 from ..comum.keras import alocar_memoria_aos_poucos
 from ..comum.log import LogaMemoria
 from ..comum.vocabulario import Vocabulario
+from .grafico_loss import GraficoLoss
 from .janelas_one_hot import JanelasOneHot
 
 
@@ -40,10 +44,16 @@ def cria_modelo(vocabulario: Vocabulario) -> Model:
 
 
 def callbacks_treino(modelo: Model, vocabulario: Vocabulario, texto_completo: str) -> list[Callback]:
-    callback_checkpoint = ModelCheckpoint(filepath=configuracao.caminho_checkpoint, monitor='loss', save_best_only=True)
+    agora = datetime.now().strftime('%Y%m%d-%H%M%S')
+
+    caminho_checkpoint = join(configuracao.diretorio_modelo, f'{agora}-epoch-{{epoch}}-loss-{{loss}}.keras')
+    caminho_grafico = join(configuracao.diretorio_modelo, f'{agora}-loss.png')
+
+    callback_checkpoint = ModelCheckpoint(filepath=caminho_checkpoint, monitor='loss', save_best_only=True)
+    callback_grafico_loss = GraficoLoss(caminho_grafico)
     callback_parada = EarlyStopping(monitor='loss', patience=configuracao.paciencia_treino, verbose=1)
 
-    return [callback_checkpoint, callback_parada]
+    return [callback_checkpoint, callback_grafico_loss, callback_parada]
 
 
 def main():

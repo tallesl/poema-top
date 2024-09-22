@@ -11,7 +11,7 @@ paciencia_treino = 50
 epocas_treino = 9999
 
 # caminho dos checkpoints salvos durante treino
-caminho_checkpoint = '../modelos_treinados/epoch-{epoch}-loss-{loss}.keras'
+diretorio_modelo = '../modelos_treinados/temp/'
 
 # unidades (neurônios) da camada LSTM
 unidades_lstm = 128
