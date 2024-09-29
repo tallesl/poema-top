@@ -2,7 +2,7 @@ from datetime import datetime
 from os.path import join
 
 from keras.callbacks import Callback, EarlyStopping, ModelCheckpoint
-from keras.layers import Dense, Input, LSTM
+from keras.layers import Dense, GRU, Input
 from keras.models import Model, Sequential
 from keras.optimizers import RMSprop
 
@@ -24,12 +24,11 @@ def cria_modelo(vocabulario: Vocabulario) -> Model:
     formato_entrada = (configuracao_comum.tamanho_janela, vocabulario.tamanho)
     modelo.add(Input(shape=formato_entrada))
 
-    # camada LSTM opcional
-    if configuracao.duas_camadas_lstm:
-        modelo.add(LSTM(128, return_sequences=True))
+    # primeira camada GRU (oculta)
+    modelo.add(GRU(128, return_sequences=True))
 
-    # camada LSTM sempre present
-    modelo.add(LSTM(128))
+    # segunda camada GRU (oculta)
+    modelo.add(GRU(128))
 
     # camada de saída
     modelo.add(Dense(vocabulario.tamanho, activation='softmax'))
