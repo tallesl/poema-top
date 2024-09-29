@@ -23,3 +23,7 @@ treina:
 
 amostra:
     python3 -m poema_top.amostra
+
+websocket:
+    xdg-open poema_top/websocket/index.html
+    python3 -m poema_top.websocket

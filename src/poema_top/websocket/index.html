@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poema 🔝</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #C2EABD;
+            font-family: 'Arial', sans-serif;
+        }
+
+        h1 {
+            font-size: 36px;
+            color: #333;
+            text-align: center;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 70%;
+            width: 90%;
+            max-width: 800px;
+            background-color: rgba(255, 255, 255, 0.85);
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        #output {
+            width: 100%;
+            height: 100%;
+            background-color: #f0f0f0;
+            border: none;
+            padding: 20px;
+            font-size: 18px;
+            font-family: monospace;
+            line-height: 1.5;
+            color: #333;
+            border-radius: 10px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        footer {
+            margin-bottom: 20px;
+        }
+
+        footer a {
+            text-decoration: none;
+            color: #4CAF50;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>Poema 🔝</h1>
+
+    <div class="container">
+        <div id="output" contenteditable="false"></div>
+    </div>
+
+    <footer>
+        <a href="https://github.com/tallesl/poema-top" target="_blank">GitHub</a>
+    </footer>
+
+    <script>
+        const outputDiv = document.getElementById('output');
+        let socket;
+
+        // Função para conectar ao WebSocket
+        function conectarWebSocket() {
+            socket = new WebSocket('ws://localhost:8000');
+
+            // Quando a conexão é aberta
+            socket.onopen = function() {
+                outputDiv.textContent = ""; // Limpa a tela ao conectar
+            };
+
+            // Quando uma mensagem é recebida
+            socket.onmessage = function(event) {
+                outputDiv.textContent += event.data;
+            };
+
+            // Quando a conexão é fechada
+            socket.onclose = function() {
+                outputDiv.textContent = "A conexão foi fechada.";
+            };
+
+            // Quando ocorre um erro
+            socket.onerror = function() {
+                outputDiv.textContent = "Erro ao conectar ao WebSocket.";
+            };
+        }
+
+        // Conectar automaticamente ao carregar a página
+        window.onload = conectarWebSocket;
+    </script>
+
+</body>
+</html>
