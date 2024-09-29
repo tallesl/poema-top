@@ -28,7 +28,6 @@ class GraficoLoss(Callback):
 
         # plota as linha de loss e val_loss
         plt.plot(historico['loss'], label='loss')
-        plt.plot(historico['val_loss'], label='val_loss')
 
         # rótulos dos eixo X e Y
         plt.xlabel('epoch')
