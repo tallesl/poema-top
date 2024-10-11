@@ -61,17 +61,17 @@ def gera_amostras(modelo: Model, vocabulario: Vocabulario, texto_completo: str) 
 def main():
     alocar_memoria_aos_poucos()
 
-    with LogaMemoria('Lendo txt...'):
-        texto_completo = le_txt_dataset()
+    print('Lendo txt...')
+    texto_completo = le_txt_dataset()
 
-    with LogaMemoria('Montando vocabulário...'):
-        vocabulario = Vocabulario(texto_completo)
+    print('Montando vocabulário...')
+    vocabulario = Vocabulario(texto_completo)
 
-    with LogaMemoria('Carregando último modelo...'):
-        modelo = carrega_ultimo_modelo()
+    print('Carregando último modelo...')
+    modelo = carrega_ultimo_modelo()
 
-    with LogaMemoria('Gerando amostras...'):
-        gera_amostras(modelo, vocabulario, texto_completo)
+    print('Gerando amostras...')
+    gera_amostras(modelo, vocabulario, texto_completo)
 
 
 if __name__ == '__main__':
