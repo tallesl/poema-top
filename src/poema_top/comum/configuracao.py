@@ -10,3 +10,6 @@ remove_terminador = '@\n'
 
 # quantidade de caracteres de cada janela de texto
 tamanho_janela = 60
+
+# diretório dos checkpoints salvos durante treino
+diretorio_checkpoint = '../modelos_treinados/temp/'

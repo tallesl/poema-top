@@ -1,39 +1,16 @@
-from os import listdir, path
 from random import randint
 from sys import stdout
 
-from keras.models import load_model, Model
+from keras.models import Model
 import numpy as np
 
 from . import configuracao
 from ..comum import configuracao as configuracao_comum
 from ..comum.dataset import le_txt_dataset
-from ..comum.keras import alocar_memoria_aos_poucos
+from ..comum.keras import alocar_memoria_aos_poucos, carrega_ultimo_modelo
 from ..comum.log import LogaMemoria
 from ..comum.predicao import seleciona_caractere
 from ..comum.vocabulario import Vocabulario
-
-
-def carrega_ultimo_modelo() -> Model:
-
-    # listando todos arquivos .keras do diretório
-    diretorio = configuracao.diretorio_checkpoint
-    arquivos = listdir(diretorio)
-    arquivos_keras = [path.join(diretorio, a) for a in arquivos if a.endswith('.keras')]
-    
-    # se nenhum arquivo .keras foi encontrado
-    if not arquivos_keras:
-        raise FileNotFoundError(f"No .keras model files found in the directory: {folder_path}")
-    
-    # obtém o arquivo com a data de alteração mais recente
-    ultimo_modelo = max(arquivos_keras, key=path.getmtime)
-    
-    # carrega o modelo
-    modelo = load_model(ultimo_modelo)
-
-    print(f'Carregado modelo "{ultimo_modelo}".')
-
-    return modelo
 
 
 def gera_amostras(modelo: Model, vocabulario: Vocabulario, texto_completo: str) -> None:
