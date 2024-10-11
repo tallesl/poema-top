@@ -24,6 +24,9 @@ treina:
 amostra:
     python3 -m poema_top.amostra
 
+infere:
+    python3 -m poema_top.infere
+
 websocket:
     xdg-open poema_top/websocket/index.html
     python3 -m poema_top.websocket
