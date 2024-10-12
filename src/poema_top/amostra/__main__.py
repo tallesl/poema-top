@@ -15,7 +15,7 @@ from ..comum.predicao import gera_proximo_caractere_continuamente
 from ..comum.vocabulario import Vocabulario
 
 
-def main():
+def main() -> None:
     try:
         alocar_memoria_aos_poucos()
 

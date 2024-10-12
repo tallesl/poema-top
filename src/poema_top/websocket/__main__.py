@@ -1,9 +1,12 @@
+# type: ignore
+
 from asyncio import get_event_loop, sleep, gather, create_task
-from websockets import serve, ConnectionClosed
 from os import listdir, path
 from random import randint
 from sys import stdout
+
 from keras.models import load_model, Model
+from websockets import serve, ConnectionClosed
 import numpy as np
 
 from . import configuracao
@@ -19,8 +22,7 @@ vocabulario = None
 texto_completo = None
 conexoes = []
 
-
-async def inferencia_continua() -> None:
+async def inferencia_continua():
     global conexoes
 
     texto_inicial = obtem_janela_aleatoria(texto_completo)
@@ -38,7 +40,6 @@ async def inferencia_continua() -> None:
 
         except Exception as e:
             print(e)
-
 
 async def handler(websocket, path):
     global conexoes
@@ -67,7 +68,7 @@ async def inicializa_servidor():
 
     create_task(inferencia_continua())
 
-    servidor = await serve(handler, "localhost", configuracao.porta)
+    servidor = await serve(handler, 'localhost', configuracao.porta)
     print('WebSocket iniciado...')
 
     await servidor.wait_closed()
@@ -79,4 +80,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

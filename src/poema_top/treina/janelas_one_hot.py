@@ -1,4 +1,6 @@
-import numpy as np
+from typing import Any
+
+from numpy import dtype, float32, ndarray, zeros
 
 from . import configuracao
 from ..comum import configuracao as configuracao_comum
@@ -47,8 +49,8 @@ def _quebra_em_janelas(texto_completo: str) -> tuple[list[str], list[str]]:
 
     return janelas_exceto_ultimo, janelas_ultimo
 
-def _one_hot_janelas(janelas_exceto_ultimo: list[str], janelas_ultimo: list[str], vocabulario: Vocabulario) -> tuple[
-    np.ndarray, np.ndarray]:
+def _one_hot_janelas(janelas_exceto_ultimo: list[str], janelas_ultimo: list[str],
+    vocabulario: Vocabulario) -> tuple[ndarray[Any, dtype[float32]], ndarray[Any, dtype[float32]]]:
 
     assert janelas_exceto_ultimo
     assert janelas_ultimo
@@ -66,8 +68,8 @@ def _one_hot_janelas(janelas_exceto_ultimo: list[str], janelas_ultimo: list[str]
     shape_x = (total_janelas, configuracao_comum.tamanho_janela - 1, vocabulario.tamanho)
     shape_y = (total_janelas, vocabulario.tamanho)
 
-    x = np.zeros(shape_x, dtype=bool)
-    y = np.zeros(shape_y, dtype=bool)
+    x = zeros(shape_x, dtype=bool)
+    y = zeros(shape_y, dtype=bool)
 
     # para cada janela
     for i in range(total_janelas):

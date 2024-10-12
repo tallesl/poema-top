@@ -8,7 +8,7 @@ import tensorflow as tf
 from . import configuracao
 
 
-def alocar_memoria_aos_poucos():
+def alocar_memoria_aos_poucos() -> None:
     '''
     Evita com que o TensorFlow aloque toda a memória da GPU ao iniciar.
     https://www.tensorflow.org/api_docs/python/tf/config/experimental/set_memory_growth

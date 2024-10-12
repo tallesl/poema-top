@@ -10,7 +10,7 @@ class Vocabulario:
 
         # mapeando caractere para índice e vice-versa
         self.obtem_indice = {c: i for i, c in enumerate(caracteres)}
-        self.obtem_caractere = {i: c for i, c in enumerate(caracteres)}
+        self.obtem_caractere = dict(enumerate(caracteres))
         self.tamanho = len(caracteres)
 
 

@@ -1,17 +1,9 @@
-from random import randint
-from sys import stdout
-
-from keras.models import Model
-import numpy as np
-
 from ..comum.dataset import le_txt_dataset
 from ..comum.keras import alocar_memoria_aos_poucos, carrega_ultimo_modelo
-from ..comum.log import LogaMemoria
 from ..comum.predicao import gera_proximo_caractere_continuamente
 from ..comum.vocabulario import Vocabulario
 
-
-def main():
+def main() -> None:
     try:
         alocar_memoria_aos_poucos()
 
@@ -37,7 +29,6 @@ def main():
 
     except KeyboardInterrupt:
         print()
-
 
 if __name__ == '__main__':
     main()

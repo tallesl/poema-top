@@ -3,8 +3,8 @@ from os.path import join
 
 from keras.callbacks import Callback, EarlyStopping, ModelCheckpoint
 from keras.layers import Dense, GRU, Input
-from keras.models import Model, Sequential
-from keras.optimizers import RMSprop
+from keras.models import Model, Sequential # type: ignore[import-untyped]
+from keras.optimizers import RMSprop # type: ignore[import-untyped]
 
 from . import configuracao
 from ..comum import configuracao as configuracao_comum
@@ -55,7 +55,7 @@ def callbacks_treino(modelo: Model, vocabulario: Vocabulario, texto_completo: st
     return [callback_checkpoint, callback_grafico_loss, callback_parada]
 
 
-def main():
+def main() -> None:
     alocar_memoria_aos_poucos()
 
     with LogaMemoria('Lendo txt...'):

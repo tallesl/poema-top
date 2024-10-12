@@ -5,13 +5,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-class GraficoLoss(Callback):
+class GraficoLoss(Callback): # type: ignore[misc]
     def __init__(self, caminho_arquivo: str):
         super().__init__()
         self.caminho_arquivo = caminho_arquivo
 
 
-    def on_epoch_end(self, epoch: int, logs: dict[str, Any]):
+    def on_epoch_end(self, epoch: int, logs: dict[str, Any]) -> None:
 
         # contando as épocas a partir de 1
         epoch = epoch + 1
