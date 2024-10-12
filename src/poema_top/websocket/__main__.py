@@ -8,64 +8,46 @@ import numpy as np
 
 from . import configuracao
 from ..comum import configuracao as configuracao_comum
-from ..comum.dataset import le_txt_dataset
+from ..comum.dataset import le_txt_dataset, obtem_janela_aleatoria
 from ..comum.keras import alocar_memoria_aos_poucos
-from ..comum.predicao import gera_proximo_caractere, seleciona_caractere
+from ..comum.predicao import gera_proximo_caractere_continuamente
 from ..comum.log import LogaMemoria
 from ..comum.vocabulario import Vocabulario
 
-# Variáveis globais
 modelo = None
 vocabulario = None
 texto_completo = None
-conexoes = []  # Lista de conexões ativas
+conexoes = []
+
 
 async def inferencia_continua() -> None:
-    """
-    Função de inferência contínua que roda indefinidamente e gera texto,
-    transmitindo o texto gerado para todas as conexões ativas.
-    """
     global conexoes
 
-    indice_comeco_ultima_janela = len(texto_completo) - configuracao_comum.tamanho_janela - 1
-    inicio_janela = randint(0, indice_comeco_ultima_janela)
-    fim_janela = inicio_janela + configuracao_comum.tamanho_janela
-    janela_atual = texto_completo[inicio_janela : fim_janela]
-    temperatura = configuracao.temperatura
+    texto_inicial = obtem_janela_aleatoria(texto_completo)
+    gerador_caracteres = gera_proximo_caractere_continuamente(modelo, vocabulario, texto_inicial,
+        configuracao.temperatura)
 
-    try:
-        while True:
-            # Gera um novo caractere
-            proximo_caractere = gera_proximo_caractere(modelo, vocabulario, janela_atual, temperatura)
+    while True:
+        try:
+            proximo_caractere = next(gerador_caracteres)
 
-            # Atualiza a janela
-            janela_atual = janela_atual[1:] + proximo_caractere
-
-            # Envia o caractere gerado para todas as conexões ativas
             if conexoes:
                 await gather(*[websocket.send(proximo_caractere) for websocket in conexoes])
 
-            # Espera um curto período antes de gerar o próximo caractere
-            await sleep(0.1)  # Ajuste o tempo de acordo com a velocidade desejada
+            await sleep(0)
 
-    except Exception as e:
-        print(f'Erro na inferência contínua: {e}')
+        except Exception as e:
+            print(e)
+
 
 async def handler(websocket, path):
-    """
-    Handler para cada nova conexão WebSocket. Cada cliente que se conecta
-    será adicionado à lista de conexões ativas e receberá os resultados da
-    inferência contínua.
-    """
     global conexoes
     conexoes.append(websocket)
     print(f'Cliente conectado. Conexões ativas: {len(conexoes)}')
 
     try:
-        # Aguarda até que a conexão seja fechada
         await websocket.wait_closed()
     finally:
-        # Remove a conexão da lista de conexões ativas ao desconectar
         conexoes.remove(websocket)
         print(f'Cliente desconectado. Conexões ativas: {len(conexoes)}')
 
@@ -83,14 +65,12 @@ async def inicializa_servidor():
     with LogaMemoria('Carregando modelo...'):
         modelo = load_model(configuracao.modelo)
 
-    # Inicia a inferência contínua em segundo plano
     create_task(inferencia_continua())
 
-    # Inicializa o servidor WebSocket
     servidor = await serve(handler, "localhost", configuracao.porta)
     print('WebSocket iniciado...')
 
-    await servidor.wait_closed()  # Aguarda até o servidor ser encerrado
+    await servidor.wait_closed()
 
 def main():
     loop = get_event_loop()

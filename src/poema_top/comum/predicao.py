@@ -21,6 +21,24 @@ def gera_proximo_caractere(modelo: Model, vocabulario: Vocabulario, texto_anteri
     return proximo_caractere
 
 
+def gera_proximo_caractere_continuamente(modelo: Model, vocabulario: Vocabulario, texto_anterior: str,
+    temperatura: float) -> None:
+
+    while True:
+
+        # realiza o forward pass, aplica a temperatura, e obtém o próximo caractere previsto
+        proximo_caractere = gera_proximo_caractere(modelo, vocabulario, texto_anterior, temperatura)
+
+        # retornando o caractere obtido
+        yield proximo_caractere
+
+        # remove primeiro caractere
+        texto_anterior = texto_anterior[1:]
+
+        # adiciona o novo caractere
+        texto_anterior += proximo_caractere
+
+
 def seleciona_caractere(logits: np.ndarray[np.float32], temperatura: float = 1.0) -> np.int64:
     # converte a lista de predições para um array float64
     logits_64 = np.asarray(logits).astype('float64')

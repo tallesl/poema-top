@@ -2,4 +2,4 @@
 temperatura_amostras = [0.3, 0.6, 0.9]
 
 # quantidade de caracteres a ser gerado em cada amostra
-tamanho_amostras = 200
+tamanho_amostra = 200

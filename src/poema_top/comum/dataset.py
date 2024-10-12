@@ -15,11 +15,22 @@ def le_txt_dataset() -> str:
     return texto_completo
 
 
-def extrai_janela(texto_completo: str) -> str:
+def obtem_janela_aleatoria(texto_completo: str) -> str:
+
+    # tamanho total do arquivo
     tamanho_arquivo = len(texto_completo)
+
+    # garantindo que o texto total comporta pelo menos uma janela
     assert tamanho_arquivo > configuracao.tamanho_janela
 
-    inicio_janela = randint(0, tamanho_arquivo - configuracao.tamanho_janela)
+    # calcula qual o índice do primeiro caractere da última janela do texto completo
+    indice_comeco_ultima_janela = tamanho_arquivo - configuracao.tamanho_janela - 1
+
+    # randomiza um valor entre o início do texto até o início da última janela, que foi calculado acima
+    inicio_janela = randint(0, indice_comeco_ultima_janela)
+
+    # cálculo simples do índice final da janela baseado no índice inicial obtido acima
     fim_janela = inicio_janela + configuracao.tamanho_janela
 
+    # extrai a janela do texto completo e retorna
     return texto_completo[inicio_janela : fim_janela]

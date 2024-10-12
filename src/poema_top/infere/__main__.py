@@ -7,18 +7,8 @@ import numpy as np
 from ..comum.dataset import le_txt_dataset
 from ..comum.keras import alocar_memoria_aos_poucos, carrega_ultimo_modelo
 from ..comum.log import LogaMemoria
-from ..comum.predicao import gera_proximo_caractere, seleciona_caractere
+from ..comum.predicao import gera_proximo_caractere_continuamente
 from ..comum.vocabulario import Vocabulario
-
-
-def insere_caractere(texto_atual: str, proximo_caractere: str) -> str:
-        # remove primeiro caractere
-        proximo_texto = texto_atual[1:]
-
-        # adiciona novo caractere predito
-        proximo_texto += proximo_caractere
-
-        return proximo_texto
 
 
 def main():
@@ -38,15 +28,12 @@ def main():
         temperatura = float(input())
 
         print('Texto inicial: ', end='', flush=True)
-        texto_atual = input().lower()
+        texto_inicial = input().lower()
 
-        while True:
+        gerador_caracteres = gera_proximo_caractere_continuamente(modelo, vocabulario, texto_inicial, temperatura)
 
-            proximo_caractere = gera_proximo_caractere(modelo, vocabulario, texto_atual, temperatura)
-            texto_atual = insere_caractere(texto_atual, proximo_caractere)
-
-            stdout.write(proximo_caractere)
-            stdout.flush()
+        for caractere in gerador_caracteres:
+            print(caractere, end='', flush=True)
 
     except KeyboardInterrupt:
         print()
