@@ -1,13 +1,21 @@
+'''
+Módulo que auxilia na manipulação do dataset de texto, quebrando em janelas e codificando em one-hot.
+'''
+
 from typing import Any
 
 from numpy import dtype, float32, ndarray, zeros
 
-from . import configuracao
+from . import configuracao # pylint: disable=no-name-in-module
 from ..comum import configuracao as configuracao_comum
 from ..comum.vocabulario import Vocabulario
 
-
 class JanelasOneHot:
+    '''
+    Classe que recebe o texto completo do dataset e o vocabulário, quebra em janelas, codifica em one-hot, e deixa
+    preparada o x e y a ser utilizado no treino (sendo x o texto anterior em one-hot, e y o próximo caractere em
+    one-hot.
+    '''
     def __init__(self, texto_completo: str, vocabulario: Vocabulario) -> None:
         assert texto_completo
         assert vocabulario
@@ -17,6 +25,10 @@ class JanelasOneHot:
         self.x, self.y = _one_hot_janelas(janelas_exceto_ultimo, janelas_ultimo, vocabulario)
 
 def _quebra_em_janelas(texto_completo: str) -> tuple[list[str], list[str]]:
+    '''
+    Quebra o texto passado em janelas e retorna uma tupla com as janelas e o próximo caractere da janela.
+    '''
+
     assert texto_completo
 
     total_caracteres = len(texto_completo)
@@ -38,7 +50,7 @@ def _quebra_em_janelas(texto_completo: str) -> tuple[list[str], list[str]]:
         exceto_ultimo = texto_completo[inicio_janela:fim_janela] # janelas de caracteres exceto o último
         ultimo = texto_completo[fim_janela] # último caractere
 
-        # exceto último + último = janela completa 
+        # exceto último + último = janela completa
         assert len(exceto_ultimo) + len(ultimo) == configuracao_comum.tamanho_janela
 
         janelas_exceto_ultimo.append(exceto_ultimo)
@@ -51,6 +63,9 @@ def _quebra_em_janelas(texto_completo: str) -> tuple[list[str], list[str]]:
 
 def _one_hot_janelas(janelas_exceto_ultimo: list[str], janelas_ultimo: list[str],
     vocabulario: Vocabulario) -> tuple[ndarray[Any, dtype[float32]], ndarray[Any, dtype[float32]]]:
+    '''
+    Codifica as janelas e os últimos caracteres recebidos em one-hot.
+    '''
 
     assert janelas_exceto_ultimo
     assert janelas_ultimo

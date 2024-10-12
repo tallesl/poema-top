@@ -1,9 +1,20 @@
+'''
+Script que carrega o dataset (arquivo .txt) e o último modelo treinado do diretório de checkpoint, solicita ao usuário
+um texto inicial e uma temperatura, e realiza o forward pass continuamente exibindo os caracteres na linha de comando.
+'''
+
 from ..comum.dataset import le_txt_dataset
 from ..comum.keras import alocar_memoria_aos_poucos, carrega_ultimo_modelo
 from ..comum.predicao import gera_proximo_caractere_continuamente
 from ..comum.vocabulario import Vocabulario
 
 def main() -> None:
+    '''
+    Função principal da aplicação.
+    '''
+
+    # pylint: disable=duplicate-code
+
     try:
         alocar_memoria_aos_poucos()
 

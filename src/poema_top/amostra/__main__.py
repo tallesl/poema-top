@@ -1,20 +1,24 @@
-from itertools import count, islice
-from random import randint
-from sys import stdout
-from typing import Optional
+'''
+Script que carrega o dataset (arquivo .txt) e o último modelo treinado do diretório de checkpoint, retira uma janela
+aleatória de texto do dataset, e realiza o forward pass no modelo com a janela selecionada, em diferentes temperaturas,
+exibindo as amostras na linha de comando.
+'''
 
-from keras.models import Model
-import numpy as np
+from itertools import islice
 
 from . import configuracao
-from ..comum import configuracao as configuracao_comum
 from ..comum.dataset import le_txt_dataset, obtem_janela_aleatoria
 from ..comum.keras import alocar_memoria_aos_poucos, carrega_ultimo_modelo
 from ..comum.predicao import gera_proximo_caractere_continuamente
 from ..comum.vocabulario import Vocabulario
 
-
 def main() -> None:
+    '''
+    Função principal da aplicação.
+    '''
+
+    # pylint: disable=duplicate-code
+
     try:
         alocar_memoria_aos_poucos()
 
@@ -46,7 +50,6 @@ def main() -> None:
 
     except KeyboardInterrupt:
         print()
-
 
 if __name__ == '__main__':
     main()

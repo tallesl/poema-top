@@ -1,17 +1,28 @@
+'''
+Módulo que expõe callback para plotar o gráfico da perda durante o treinamento.
+'''
+
 from typing import Any
 
 from keras.callbacks import Callback
 import matplotlib.pyplot as plt
-import numpy as np
-
 
 class GraficoLoss(Callback): # type: ignore[misc]
+    '''
+    Callback customizado do Keras que, a cada época do treinamento, plota no gráfico a perda calculada.
+    '''
     def __init__(self, caminho_arquivo: str):
+        '''
+        Ctor.
+        '''
+
         super().__init__()
         self.caminho_arquivo = caminho_arquivo
 
-
-    def on_epoch_end(self, epoch: int, logs: dict[str, Any]) -> None:
+    def on_epoch_end(self, epoch: int, logs: dict[str, Any]) -> None: # pylint: disable=unused-argument
+        '''
+        A cada época plota no gráfico a perda calculada.
+        '''
 
         # contando as épocas a partir de 1
         epoch = epoch + 1

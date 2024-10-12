@@ -1,8 +1,20 @@
+'''
+Módulo que expõe a classe que realiza toda a manipulação do vocabulário.
+'''
+
 import numpy as np
 from numpy.typing import NDArray
 
 class Vocabulario:
+    '''
+    Classe que cria um vocabulário de caracteres únicos a partir de um texto e oferece métodos de conversão de/para
+    caractere/índice e conversão para one-hot.
+    '''
     def __init__(self, texto_completo: str):
+        '''
+        Ctor.
+        '''
+
         assert texto_completo
 
         # caracteres únicos ordenados
@@ -13,8 +25,11 @@ class Vocabulario:
         self.obtem_caractere = dict(enumerate(caracteres))
         self.tamanho = len(caracteres)
 
-
     def one_hot_texto(self, texto: str) -> NDArray[np.bool_]:
+        '''
+        Codifica em one-hot cada caractere do texto passado, de acordo com o vocabulário.
+        '''
+
         assert texto
 
         # convertendo cada caractere do texto para one hot
@@ -28,8 +43,11 @@ class Vocabulario:
 
         return np_array
 
-
     def one_hot_caractere(self, caractere: str) -> NDArray[np.bool_]:
+        '''
+        Codifica em one-hot o caractere passado, de acordo com o vocabulário.
+        '''
+
         assert caractere
         assert len(caractere) == 1
 

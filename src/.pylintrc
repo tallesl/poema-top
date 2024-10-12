@@ -1,2 +1,2 @@
 [MESSAGES CONTROL]
-disable=relative-beyond-top-level
+disable=import-error,no-name-in-module,relative-beyond-top-level,too-few-public-methods

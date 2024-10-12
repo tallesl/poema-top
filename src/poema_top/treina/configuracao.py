@@ -1,3 +1,5 @@
+# pylint: disable=missing-module-docstring,invalid-name
+
 # ao 'fatiar' o texto em janelas, quantos caracteres são 'pulados' para o ínicio de uma nova janela
 distancia_janela = 3
 

@@ -1,8 +1,16 @@
+'''
+Módulo com funções relacionadas à manipulação do dataset (arquivo .txt).
+'''
+
 from random import randint
 
 from . import configuracao
 
 def le_txt_dataset() -> str:
+    '''
+    Lê todo o dataset para memória, converte caracteres para lowercase, remove terminador, e retorna o texto
+    transformado.
+    '''
     with open(configuracao.dataset_txt, encoding='utf-8') as arquivo:
         texto_completo = arquivo.read()
 
@@ -14,8 +22,11 @@ def le_txt_dataset() -> str:
 
     return texto_completo
 
-
 def obtem_janela_aleatoria(texto_completo: str) -> str:
+    '''
+    Extrai uma janela de texto do texto completo passado. A janela é retirada de uma parte aleatório do texto e respeita
+    o tamanho encontrado no arquivo de configuração.
+    '''
 
     # tamanho total do arquivo
     tamanho_arquivo = len(texto_completo)

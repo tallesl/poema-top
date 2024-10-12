@@ -1,22 +1,11 @@
 tree:
     git ls-files | tree --fromfile --dirsfirst
 
-venv:
-    python3 -m venv venv
-    venv/bin/pip install -r requirements.txt
-    venv/bin/pip install -r requirements-dev.txt
-
-vim:
-    vim poema_top/
-
 pylint:
     pylint poema_top/ --max-line-length 120 || :
 
 mypy:
     mypy -p poema_top --strict || :
-
-pytest:
-    pytest --setup-show
 
 treina:
     python3 -m poema_top.treina

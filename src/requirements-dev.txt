@@ -2,5 +2,4 @@ mypy==1.11.2
 objexplore==1.6.3
 pudb==2024.1.2
 pylint==3.2.7
-pytest==8.3.3
 types-tensorflow==2.17.0.20240820

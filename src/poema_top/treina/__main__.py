@@ -1,3 +1,7 @@
+'''
+Script que realiza o treinamento de um novo modelo do zero.
+'''
+
 from datetime import datetime
 from os.path import join
 
@@ -14,8 +18,11 @@ from ..comum.vocabulario import Vocabulario
 from .grafico_loss import GraficoLoss
 from .janelas_one_hot import JanelasOneHot
 
-
 def cria_modelo(vocabulario: Vocabulario) -> Model:
+    '''
+    Instancia e retorna o modelo Keras, com o treino configurado (taxa de aprendizado, função de perda, otimizador).
+    '''
+
     # "a plain stack of layers where each layer has exactly one input tensor and one output tensor"
     modelo = Sequential()
 
@@ -40,8 +47,11 @@ def cria_modelo(vocabulario: Vocabulario) -> Model:
 
     return modelo
 
+def callbacks_treino() -> list[Callback]:
+    '''
+    Configura os callbacks utilizados durante o treino no modelo passado.
+    '''
 
-def callbacks_treino(modelo: Model, vocabulario: Vocabulario, texto_completo: str) -> list[Callback]:
     agora = datetime.now().strftime('%Y%m%d-%H%M%S')
 
     caminho_checkpoint = join(configuracao.diretorio_modelo, f'{agora}-epoch-{{epoch}}-loss-{{loss}}.keras')
@@ -53,8 +63,13 @@ def callbacks_treino(modelo: Model, vocabulario: Vocabulario, texto_completo: st
 
     return [callback_checkpoint, callback_grafico_loss, callback_parada]
 
-
 def main() -> None:
+    '''
+    Função principal da aplicação.
+    '''
+
+    # pylint: disable=duplicate-code
+
     alocar_memoria_aos_poucos()
 
     print('Lendo txt...')
@@ -68,11 +83,10 @@ def main() -> None:
 
     print('Instanciando modelo...')
     modelo = cria_modelo(vocabulario)
-    callbacks = callbacks_treino(modelo, vocabulario, texto_completo)
+    callbacks = callbacks_treino()
 
     print('Treinando...')
     modelo.fit(janelas.x, janelas.y, batch_size=128, epochs=configuracao.epocas_treino, callbacks=callbacks)
-
 
 if __name__ == '__main__':
     main()
