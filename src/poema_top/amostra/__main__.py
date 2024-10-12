@@ -10,7 +10,6 @@ from . import configuracao
 from ..comum import configuracao as configuracao_comum
 from ..comum.dataset import le_txt_dataset, obtem_janela_aleatoria
 from ..comum.keras import alocar_memoria_aos_poucos, carrega_ultimo_modelo
-from ..comum.log import LogaMemoria
 from ..comum.predicao import gera_proximo_caractere_continuamente
 from ..comum.vocabulario import Vocabulario
 

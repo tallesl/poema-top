@@ -10,7 +10,6 @@ from . import configuracao
 from ..comum import configuracao as configuracao_comum
 from ..comum.dataset import le_txt_dataset
 from ..comum.keras import alocar_memoria_aos_poucos
-from ..comum.log import LogaMemoria
 from ..comum.vocabulario import Vocabulario
 from .grafico_loss import GraficoLoss
 from .janelas_one_hot import JanelasOneHot
@@ -58,21 +57,21 @@ def callbacks_treino(modelo: Model, vocabulario: Vocabulario, texto_completo: st
 def main() -> None:
     alocar_memoria_aos_poucos()
 
-    with LogaMemoria('Lendo txt...'):
-        texto_completo = le_txt_dataset()
+    print('Lendo txt...')
+    texto_completo = le_txt_dataset()
 
-    with LogaMemoria('Montando vocabulário...'):
-        vocabulario = Vocabulario(texto_completo)
+    print('Montando vocabulário...')
+    vocabulario = Vocabulario(texto_completo)
 
-    with LogaMemoria('Quebrando em janelas e codificando em one hot...'):
-        janelas = JanelasOneHot(texto_completo, vocabulario)
+    print('Quebrando em janelas e codificando em one hot...')
+    janelas = JanelasOneHot(texto_completo, vocabulario)
 
-    with LogaMemoria('Instanciando modelo...'):
-        modelo = cria_modelo(vocabulario)
-        callbacks = callbacks_treino(modelo, vocabulario, texto_completo)
+    print('Instanciando modelo...')
+    modelo = cria_modelo(vocabulario)
+    callbacks = callbacks_treino(modelo, vocabulario, texto_completo)
 
-    with LogaMemoria('Treinando...'):
-        modelo.fit(janelas.x, janelas.y, batch_size=128, epochs=configuracao.epocas_treino, callbacks=callbacks)
+    print('Treinando...')
+    modelo.fit(janelas.x, janelas.y, batch_size=128, epochs=configuracao.epocas_treino, callbacks=callbacks)
 
 
 if __name__ == '__main__':
