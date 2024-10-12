@@ -10,7 +10,7 @@ from . import configuracao
 from ..comum import configuracao as configuracao_comum
 from ..comum.dataset import le_txt_dataset
 from ..comum.keras import alocar_memoria_aos_poucos
-from ..comum.predicao import seleciona_caractere
+from ..comum.predicao import gera_proximo_caractere, seleciona_caractere
 from ..comum.log import LogaMemoria
 from ..comum.vocabulario import Vocabulario
 
@@ -36,13 +36,7 @@ async def inferencia_continua() -> None:
     try:
         while True:
             # Gera um novo caractere
-            sampled = np.zeros((1, configuracao_comum.tamanho_janela, vocabulario.tamanho))
-            for i, char in enumerate(janela_atual):
-                sampled[0, i, vocabulario.obtem_indice[char]] = 1.
-
-            previsto = modelo.predict(sampled, verbose=0)[0]
-            proximo_indice = seleciona_caractere(previsto, temperatura)
-            proximo_caractere = vocabulario.obtem_caractere[proximo_indice]
+            proximo_caractere = gera_proximo_caractere(modelo, vocabulario, janela_atual, temperatura)
 
             # Atualiza a janela
             janela_atual = janela_atual[1:] + proximo_caractere

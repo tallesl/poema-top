@@ -1,4 +1,24 @@
+from keras.models import Model
 import numpy as np
+
+from . import configuracao
+from .vocabulario import Vocabulario
+
+
+def gera_proximo_caractere(modelo: Model, vocabulario: Vocabulario, texto_anterior: str, temperatura: float) -> None:
+
+    texto_anterior_one_hot = np.zeros((1, configuracao.tamanho_janela, vocabulario.tamanho))
+    zeros_esquerda = configuracao.tamanho_janela - len(texto_anterior)
+
+    for i, char in enumerate(texto_anterior):
+        texto_anterior_one_hot[0, i + zeros_esquerda, vocabulario.obtem_indice[char]] = 1.
+
+    previsto = modelo.predict(texto_anterior_one_hot, verbose=0)[0]
+
+    proximo_indice = seleciona_caractere(previsto, temperatura)
+    proximo_caractere = vocabulario.obtem_caractere[proximo_indice]
+
+    return proximo_caractere
 
 
 def seleciona_caractere(logits: np.ndarray[np.float32], temperatura: float = 1.0) -> np.int64:

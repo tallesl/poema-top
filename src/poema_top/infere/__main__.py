@@ -4,29 +4,11 @@ from sys import stdout
 from keras.models import Model
 import numpy as np
 
-from . import configuracao
-from ..comum import configuracao as configuracao_comum
 from ..comum.dataset import le_txt_dataset
 from ..comum.keras import alocar_memoria_aos_poucos, carrega_ultimo_modelo
 from ..comum.log import LogaMemoria
-from ..comum.predicao import seleciona_caractere
+from ..comum.predicao import gera_proximo_caractere, seleciona_caractere
 from ..comum.vocabulario import Vocabulario
-
-
-def gera_proximo_caractere(modelo: Model, vocabulario: Vocabulario, texto_anterior: str, temperatura: float) -> None:
-
-    texto_anterior_one_hot = np.zeros((1, configuracao_comum.tamanho_janela, vocabulario.tamanho))
-    zeros_esquerda = configuracao_comum.tamanho_janela - len(texto_anterior)
-
-    for i, char in enumerate(texto_anterior):
-        texto_anterior_one_hot[0, i + zeros_esquerda, vocabulario.obtem_indice[char]] = 1.
-
-    previsto = modelo.predict(texto_anterior_one_hot, verbose=0)[0]
-
-    proximo_indice = seleciona_caractere(previsto, temperatura)
-    proximo_caractere = vocabulario.obtem_caractere[proximo_indice]
-
-    return proximo_caractere
 
 
 def insere_caractere(texto_atual: str, proximo_caractere: str) -> str:

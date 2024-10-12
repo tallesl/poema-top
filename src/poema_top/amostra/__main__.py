@@ -9,7 +9,7 @@ from ..comum import configuracao as configuracao_comum
 from ..comum.dataset import le_txt_dataset
 from ..comum.keras import alocar_memoria_aos_poucos, carrega_ultimo_modelo
 from ..comum.log import LogaMemoria
-from ..comum.predicao import seleciona_caractere
+from ..comum.predicao import gera_proximo_caractere, seleciona_caractere
 from ..comum.vocabulario import Vocabulario
 
 
@@ -37,14 +37,8 @@ def gera_amostras(modelo: Model, vocabulario: Vocabulario, texto_completo: str) 
         janela_atual = janela_aleatoria
 
         for i in range(configuracao.tamanho_amostras):
-            sampled = np.zeros((1, configuracao_comum.tamanho_janela, vocabulario.tamanho))
-            for i, char in enumerate(janela_atual):
-                sampled[0, i, vocabulario.obtem_indice[char]] = 1.
 
-            previsto = modelo.predict(sampled, verbose=0)[0]
-
-            proximo_indice = seleciona_caractere(previsto, temperatura)
-            proximo_caractere = vocabulario.obtem_caractere[proximo_indice]
+            proximo_caractere = gera_proximo_caractere(modelo, vocabulario, janela_atual, temperatura)
 
             # remove primeiro caractere
             janela_atual = janela_atual[1:]
