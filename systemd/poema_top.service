@@ -1,0 +1,12 @@
+[Unit]
+After=multi-user.target
+
+[Service]
+Type=idle
+User=talles
+WorkingDirectory=/home/talles/poema-top/src
+ExecStart=/home/talles/poema-top/src/venv/bin/python3 -m poema_top.websocket
+Restart=always
+
+[Install]
+WantedBy=multi-user.target+.
