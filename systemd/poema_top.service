@@ -9,4 +9,4 @@ ExecStart=/home/talles/poema-top/src/venv/bin/python3 -m poema_top.websocket
 Restart=always
 
 [Install]
-WantedBy=multi-user.target+.
+WantedBy=multi-user.target
